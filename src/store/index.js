@@ -3,7 +3,7 @@ import Vuex from 'vuex';
 
 Vue.use(Vuex);
 const state = {   //要设置的全局访问的state对象
-    showFooter: true,
+
     user: [//type:0个人，1公司，2管理员
         {uid: 1, uname: '傻逼', account: '123456', pwd: "123456", type: 0},
         {uid: 2, uname: 'shabi', account: '787878', pwd: "123456", type: 1},
@@ -13,6 +13,8 @@ const state = {   //要设置的全局访问的state对象
     userNow: {//当前用户
 
     },
+    jobNow:{},
+
     jobs: [
         {
             jname: "web前端工程师",
