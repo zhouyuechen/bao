@@ -1,15 +1,12 @@
 <template>
   <div id="app">
-    <header-box  ></header-box>
-
-
+    <header-box ></header-box>
     <router-view/>
   </div>
 </template>
 
 <script>
   import header from "./components/sub/Header";
-
   export default {
   name: 'App',
     components: {//注册子组件
