@@ -2,15 +2,15 @@ import Vue from 'vue'
 import Router from 'vue-router'
 import HelloWorld from '@/components/HelloWorld'
 import list from '@/components/list'
-import detail from '@/components/detail'
+import managerDetail from '@/components/details/managerDetail'
 Vue.use(Router)
 
 export default new Router({
   routes: [
     {
       path: '/',
-      name: 'HelloWorld',
-      component: HelloWorld
+      name: 'list',
+      component: list
     },
     {
       path: '/list',
@@ -18,9 +18,9 @@ export default new Router({
       component: list
     },
     {
-      path: '/baozi',
-      name: 'detail',
-      component: detail
+      path: '/managerDetail',
+      name: 'managerDetail',
+      component: managerDetail
     },
   ]
 })

@@ -7,12 +7,24 @@ import store from './store'//引入store
 Vue.config.productionTip = false
 import ElementUI from 'element-ui'
 import 'element-ui/lib/theme-chalk/index.css'
+
 Vue.use(ElementUI)
+
+Vue.filter("userType", function (type) {//用户类型显示
+    const typeList = {
+        0: '个人',
+        1: '公司',
+        2: '管理员'
+    }
+    return typeList[type];
+});
+
+
 /* eslint-disable no-new */
 new Vue({
-  el: '#app',
-  router,
-  store,
-  components: { App },
-  template: '<App/>'
+    el: '#app',
+    router,
+    store,
+    components: {App},
+    template: '<App/>'
 })

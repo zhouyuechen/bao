@@ -11,5 +11,4 @@ export default new Vuex.Store({
         user,
         jobs
     },
-    strict: debug,
 })

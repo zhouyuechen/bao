@@ -1,23 +1,23 @@
 const state = {   //要设置的全局访问的state对象
 
     user: [//type:0个人，1公司，2管理员
-        {uid: 1, uname: '傻逼', account: '123456', pwd: "123456", type: 0},
-        {uid: 2, uname: 'shabi', account: '787878', pwd: "123456", type: 1},
-        {uid: 3, uname: 'shabie', account: '999999', pwd: "123456", type: 2}
+        {uid: 1,  account: '123456', pwd: "123456", type: 0},
+        {uid: 2,  account: '787878', pwd: "123456", type: 1},
+        {uid: 3,  account: '999999', pwd: "123456", type: 2}
     ],
     is: false,
-    userNow: {//当前用户
-
-    },
+    userNow: null,
 
 };
 const getters = {   //实时监听state值的变化(最新状态)
-
     allMember(state) {  //承载变化的changebleNum的值
         return state.user
     },
     check(state) {
         return state.is
+    },
+    now(state) {
+        return state.userNow
     },
 };
 const mutations = {
@@ -29,7 +29,7 @@ const mutations = {
             state.userNow = data;
             state.is = true;
         } else {
-            state.userNow = {};
+            state.userNow = null;
             state.is = false;
         }
 
@@ -40,10 +40,12 @@ const mutations = {
         }).length > 0
         ) {
         } else {
-            state.user.push(data)
+            state.user.push({...data,uid:++state.user[state.user.length-1].uid})
         }
-
-
+    },
+    logout(state) {   //登出
+        state.userNow = null;
+        state.is = false;
     },
 };
 const actions = {
@@ -53,11 +55,14 @@ const actions = {
     getRegister(context, data) {   //同上注释，num为要变化的形参
         context.commit('register', data)
     },
+    getLogout(context, data) {   //同上注释，num为要变化的形参
+        context.commit('logout', data)
+    },
 
 };
 
-export  default {
-    namespaced:true,
+export default {
+    namespaced: true,
     state,
     mutations,
     getters,
