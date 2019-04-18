@@ -91,7 +91,7 @@
     }
 
     .list {
-        width: 1280px;
+        width: 100%;
         margin: 5px auto;
         display: flex;
         justify-content: center;

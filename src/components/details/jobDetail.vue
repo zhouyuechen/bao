@@ -8,7 +8,7 @@
 
 <script>
     export default {
-        name: 'detail',
+        name: 'jobDetail',
         data() {
             return {
                 msg: 'Welcome to Your Vue.js App'

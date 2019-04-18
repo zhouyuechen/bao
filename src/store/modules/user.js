@@ -1,9 +1,9 @@
 const state = {   //要设置的全局访问的state对象
 
     user: [//type:0个人，1公司，2管理员
-        {uid: 1,  account: '123456', pwd: "123456", type: 0},
-        {uid: 2,  account: '787878', pwd: "123456", type: 1},
-        {uid: 3,  account: '999999', pwd: "123456", type: 2}
+        {uid: 1, account: '123456', pwd: "123456", type: 0, phone: null, email: null},
+        {uid: 2, account: '787878', pwd: "123456", type: 1, phone: null, email: null},
+        {uid: 3, account: '999999', pwd: "123456", type: 2, phone: null, email: null}
     ],
     is: false,
     userNow: null,
@@ -40,13 +40,21 @@ const mutations = {
         }).length > 0
         ) {
         } else {
-            state.user.push({...data,uid:++state.user[state.user.length-1].uid})
+            state.user.push({...data, uid: ++state.user[state.user.length - 1].uid})
         }
     },
     logout(state) {   //登出
         state.userNow = null;
         state.is = false;
     },
+    del(state, data) {//删除用户
+        state.user.map((item,i)=>{
+            if(item.uid == data.uid){
+                state.user.splice(i,1);
+                return null
+            }
+        })
+    }
 };
 const actions = {
     getLogin(context, data) {   //同上注释，num为要变化的形参
@@ -58,7 +66,9 @@ const actions = {
     getLogout(context, data) {   //同上注释，num为要变化的形参
         context.commit('logout', data)
     },
-
+    getDel(context, data) {   //同上注释，num为要变化的形参
+        context.commit('del', data)
+    },
 };
 
 export default {

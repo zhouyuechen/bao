@@ -186,12 +186,11 @@
                         return false;
                     }
                 });
-
-
             }
         },
         mounted() {
             //console.log(this.$store.getters.allMember)
+
         },
 
     }
