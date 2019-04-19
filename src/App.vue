@@ -9,7 +9,6 @@
 
 <script>
     import header from "./components/sub/Header";
-
     export default {
         name: 'App',
         components: {//注册子组件
@@ -29,7 +28,7 @@
     }
     .warp{
         width: 1280px;
-        border: 1px solid #666;
+        border: 1px solid #f5f5f5;
         margin: 20px  auto;
         padding: 16px;
         box-shadow: 0 2px 8px 0 rgba(0,0,0,0.20);

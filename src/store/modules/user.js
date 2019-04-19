@@ -1,9 +1,11 @@
 const state = {   //要设置的全局访问的state对象
 
     user: [//type:0个人，1公司，2管理员
-        {uid: 1, account: '123456', pwd: "123456", type: 0, phone: null, email: null},
-        {uid: 2, account: '787878', pwd: "123456", type: 1, phone: null, email: null},
-        {uid: 3, account: '999999', pwd: "123456", type: 2, phone: null, email: null}
+        {uid: 1, account: '123456', pwd: "123456", type: 0, phone: null, email: null,pname:"蔡徐坤"},
+        {uid: 2, account: '787878', pwd: "123456", type: 1, phone: 18888888888, email: null,cname:"傻逼有限公司",cimg:"//img.hicdn.cn/fed/images/20190404/291b64400c0e9b0982706f52ab90971f.png"},
+        {uid: 3, account: '999999', pwd: "123456", type: 2, phone: null, email: null},
+        {uid: 4, account: 'ffffff', pwd: "123456", type: 1, phone: 18932322323, email: null,cname:"大眼包子公司",cimg:"https://www.jiamengfei.com/uploads/images/2016/04-21/d4e5a1520b3f.jpg"},
+
     ],
     is: false,
     userNow: null,

@@ -139,8 +139,8 @@
             ...mapActions('user', ['getLogin', 'getRegister', 'getLogout']),
             jump(type) {
                 const list = {
-                    0: '/',
-                    1: '/',
+                    0: '/personDetail',
+                    1: '/companyDetail',
                     2: '/managerDetail',
                     3: '/list',
                 };

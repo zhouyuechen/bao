@@ -56,8 +56,8 @@
             }
         },
         methods: {
-            look(i, item) {
-                console.log(item)
+            look(i,item) {
+                this.$router.push({path: `/jobDetail/${item.jid}`});
             }
         },
         computed: {

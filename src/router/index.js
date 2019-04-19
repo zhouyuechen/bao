@@ -3,6 +3,8 @@ import Router from 'vue-router'
 import jobDetail from '@/components/details/jobDetail'
 import list from '@/components/list'
 import managerDetail from '@/components/details/managerDetail'
+import personDetail from '@/components/details/personDetail'
+import companyDetail from '@/components/details/companyDetail'
 Vue.use(Router)
 
 export default new Router({
@@ -23,9 +25,19 @@ export default new Router({
       component: managerDetail
     },
     {
-      path: '/jobDetail',
+      path: '/jobDetail/:jid',
       name: 'jobDetail',
       component: jobDetail
+    },
+    {
+      path: '/personDetail',
+      name: 'personDetail',
+      component: personDetail
+    },
+    {
+      path: '/companyDetail',
+      name: 'companyDetail',
+      component: companyDetail
     },
   ]
 })
