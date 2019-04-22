@@ -9,7 +9,9 @@
                 <el-card class="box-card">
                     <div slot="header" class="clearfix">
                         <span style="font-size: 35px ; ;color: #409eff;">{{jobNow.jname}}</span>
-                        <el-button style="float: right; padding: 3px 0;line-height: 35px" type="text" @click="join()">简历投递</el-button>
+                        <el-button style="float: right; padding: 3px 0;line-height: 35px" type="text" @click="join()">
+                            简历投递
+                        </el-button>
                     </div>
                     <el-row :gutter="5">
                         <el-col :span="8">
@@ -66,9 +68,11 @@
             ...mapGetters('jobs', ['allJobs', 'getJobById']),
             ...mapGetters('user', ['allMember', 'check', 'now'])
         },
-        methods:{
-            join(){
-                if (!this.check || this.now.type != 0) {
+        methods: {
+            join() {
+                if (!this.check) {
+                    this.$message("您还没有登录")
+                } else if (this.now.type != 0) {
                     this.$message("公司和管理员不能投哦")
                 }
             }
