@@ -14,7 +14,7 @@
                 <el-button v-if="!now" @click="dialogFormVisible = true" :round=true type="primary">登录</el-button>
                 <el-button v-if="!now" @click="registerVisible = true" :round=true type="primary">注册</el-button>
                 <div v-if="now" class="user_welcome"> 欢迎,{{now.type|userType}}用户:{{now.account}} <a
-                        @click="getLogout()">退出</a></div>
+                        @click="logout()">退出</a></div>
             </li>
         </ul>
         <el-dialog title="用户登录" :visible.sync="dialogFormVisible" width="40%">
@@ -147,6 +147,10 @@
                 this.$router.push({path: list[type]});
 
             },
+            logout(){
+                this.getLogout();
+                this.$router.push({path: '/'});
+            },
             login() {
                 let data = this.loginForm;
                 data.type = this.typeList[data.type];
@@ -190,7 +194,18 @@
         },
         mounted() {
             //console.log(this.$store.getters.allMember)
-
+            this.registerForm={
+                account: '',
+                    pwd: '',
+                    type: '个人',
+                    phone: '',
+                    email: ''
+            };
+            this.loginForm={
+                account: '',
+                    pwd: '',
+                    type: '个人'
+            }
         },
 
     }

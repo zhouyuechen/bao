@@ -29,17 +29,32 @@
         <div v-if="!onshow" >
             <el-collapse v-model="activeNames" @change="handleChange">
                 <el-collapse-item title="我发出的消息" name="1">
-                    <ul id="ex1">
+                    <ul class="massageBox" id="ex1">
                         <li v-for="item in messageList.toOther">
-                            <span class="tip">您发给{{searchCompany(item.toId).cname}}的消息：</span>  {{ item.data }}
+                            <el-row :gutter="20">
+                                <el-col :span="5"> <span class="tip">您发给{{searchCompany(item.toId).cname}}的消息：</span>
+                                </el-col>
+                                <el-col :span="15" class="text">{{ item.data }}</el-col>
+                                <el-col :span="4">
+                                </el-col>
+                            </el-row>
+
                         </li>
                     </ul>
                 </el-collapse-item>
                 <el-collapse-item title="发给我的消息" name="2">
-                    <ul id="ex2">
+                    <ul class="massageBox" id="ex2">
                         <li v-for="item in messageList.toMe">
-                            <span class="tip">{{searchCompany(item.fromId).cname}}发给您的消息：</span>     {{ item.data }}
+                            <el-row :gutter="20">
+                                <el-col :span="5"><span class="tip">{{searchCompany(item.fromId).cname}}发给您的消息：</span>
+                                </el-col>
+                                <el-col :span="15" class="text">{{ item.data }}</el-col>
+                                <el-col :span="4">
+                                    <span class="res"  v-bind:class="{ green: item.isSuccess,red: !item.isSuccess }" >   {{item.isSuccess?"恭喜，对方已接受!":"很遗憾，对方拒绝了你."}}</span>
+                                </el-col>
+                            </el-row>
                         </li>
+
                     </ul>
                 </el-collapse-item>
             </el-collapse>
@@ -66,7 +81,7 @@
                     phone: '',
                     email: ''
                 },
-                activeNames: ['1'],
+                activeNames: ['1','2'],
                 messageList:{toOther:[],toMe:[]},
                 rules: {
                     account: [
@@ -146,11 +161,34 @@
         width: 50%;
         margin: 20px auto;
     }
-    li{
-        list-style: none;
-        .tip{
-            font-size: 16px;
-            color:#409eff;
+    .massageBox{
+        ul{
+            padding: 0 !important;
+            margin: 0;
+        }
+        li{
+            list-style: none;
+
+            .tip{
+                font-size: 16px;
+                color:#409eff;
+            }
+            .green{
+                color:yellowgreen ;
+            }
+            .red{
+                color: red;
+            }
+            .res{
+                border: 1px solid #f5f5f5 ;
+                border-radius: 4px;
+                padding: 5px 20px;
+
+            }
+            .text {
+                text-align: left;
+            }
         }
     }
+
 </style>
