@@ -11,7 +11,8 @@
                     <el-input disabled v-model="personForm.account" auto-complete="off"></el-input>
                 </el-form-item>
                 <el-form-item label="密码" :label-width="formLabelWidth" prop="pwd">
-                    <el-input type="password" :disabled="isChange" v-model="personForm.pwd" auto-complete="off"></el-input>
+                    <el-input type="password" :disabled="isChange" v-model="personForm.pwd"
+                              auto-complete="off"></el-input>
                 </el-form-item>
                 <el-form-item label="昵称" :label-width="formLabelWidth" prop="pname">
                     <el-input :disabled="isChange" v-model="personForm.pname" auto-complete="off"></el-input>
@@ -26,13 +27,13 @@
             <el-button @click="isChange = !isChange">修改信息</el-button>
             <el-button :disabled="isChange" type="primary" @click="save()">保存信息</el-button>
         </div>
-        <div v-if="!onshow" >
+        <div v-if="!onshow">
             <el-collapse v-model="activeNames" @change="handleChange">
                 <el-collapse-item title="我发出的消息" name="1">
                     <ul class="massageBox" id="ex1">
                         <li v-for="item in messageList.toOther">
                             <el-row :gutter="20">
-                                <el-col :span="5"> <span class="tip">您发给{{searchCompany(item.toId).cname}}的消息：</span>
+                                <el-col :span="5"><span class="tip">您发给{{searchCompany(item.toId).cname}}的消息：</span>
                                 </el-col>
                                 <el-col :span="15" class="text">{{ item.data }}</el-col>
                                 <el-col :span="4">
@@ -50,7 +51,7 @@
                                 </el-col>
                                 <el-col :span="15" class="text">{{ item.data }}</el-col>
                                 <el-col :span="4">
-                                    <span class="res"  v-bind:class="{ green: item.isSuccess,red: !item.isSuccess }" >   {{item.isSuccess?"恭喜，对方已接受!":"很遗憾，对方拒绝了你."}}</span>
+                                    <span class="res" v-bind:class="{ green: item.isSuccess,red: !item.isSuccess }">   {{item.isSuccess?"恭喜，对方已接受!":"很遗憾，对方拒绝了你."}}</span>
                                 </el-col>
                             </el-row>
                         </li>
@@ -73,7 +74,7 @@
                 onshow: true,
                 formLabelWidth: '60px',
                 isChange: true,
-                p:"",
+                p: "",
                 personForm: {
                     account: '',
                     pwd: '',
@@ -81,8 +82,8 @@
                     phone: '',
                     email: ''
                 },
-                activeNames: ['1','2'],
-                messageList:{toOther:[],toMe:[]},
+                activeNames: ['1', '2'],
+                messageList: {toOther: [], toMe: []},
                 rules: {
                     account: [
                         {required: true, message: '请输入账号', trigger: 'blur'},
@@ -109,14 +110,14 @@
 
         },
         methods: {
-            ...mapActions('user', ['getUpdate','getLogout']),
+            ...mapActions('user', ['getUpdate', 'getLogout']),
             handleSelect(key, keyPath) {
                 this.activeIndex = key;
                 this.onshow = key == 1;
             },
             save() {
                 this.getUpdate(this.personForm)
-                if(this.personForm.pwd!==this.p){
+                if(JSON.stringify(this.personForm.pwd)!==this.p){
                     this.getLogout();
                     this.$router.push({path: '/'});
                     this.$message("密码已修改请重新登录")
@@ -124,11 +125,11 @@
             },
             handleChange(val) {
             },
-            searchCompany(cid){
+            searchCompany(cid) {
                 let res;
-                this.allMember.map((item)=>{
-                    if(item.uid==cid){
-                        res=item
+                this.allMember.map((item) => {
+                    if (item.uid == cid) {
+                        res = item
                     }
                 })
                 return res
@@ -139,17 +140,17 @@
                 this.$router.push({path: '/'});
             }
             const {account, pwd, pname, phone, email} = this.now;
-            this.personForm ={account, pwd, pname, phone, email};
-            this.p=account.toString();
-            const toOther=[],toMe=[];
-            this.allMessages.map((item,i)=>{
-                if(item.type ===1&&item.fromId==this.now.uid){
+            this.personForm = {account, pwd, pname, phone, email};
+            this.p = JSON.stringify(pwd);
+            const toOther = [], toMe = [];
+            this.allMessages.map((item, i) => {
+                if (item.type === 1 && item.fromId == this.now.uid) {
                     toOther.push(item)
-                }else if(item.type ===2&&item.toId==this.now.uid){
+                } else if (item.type === 2 && item.toId == this.now.uid) {
                     toMe.push(item)
                 }
             });
-            this.messageList={toOther,toMe};
+            this.messageList = {toOther, toMe};
         }
     }
 </script>
@@ -161,30 +162,36 @@
         width: 50%;
         margin: 20px auto;
     }
-    .massageBox{
-        ul{
+
+    .massageBox {
+        ul {
             padding: 0 !important;
             margin: 0;
         }
-        li{
+
+        li {
             list-style: none;
 
-            .tip{
+            .tip {
                 font-size: 16px;
-                color:#409eff;
+                color: #409eff;
             }
-            .green{
-                color:yellowgreen ;
+
+            .green {
+                color: yellowgreen;
             }
-            .red{
+
+            .red {
                 color: red;
             }
-            .res{
-                border: 1px solid #f5f5f5 ;
+
+            .res {
+                border: 1px solid #f5f5f5;
                 border-radius: 4px;
                 padding: 5px 20px;
 
             }
+
             .text {
                 text-align: left;
             }

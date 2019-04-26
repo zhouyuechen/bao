@@ -215,7 +215,7 @@
             }
             const {account, pwd, cname, phone, email} = this.now;
             this.cForm = {account, pwd, cname, phone, email};
-            this.p = account.toString();
+            this.p = pwd.toString();
             const toOther = [], toMe = [];
             this.allMessages.map((item, i) => {
                 if (item.type === 2 && item.fromId == this.now.uid) {

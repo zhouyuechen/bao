@@ -24,7 +24,12 @@
         -moz-osx-font-smoothing: grayscale;
         text-align: center;
         color: #2c3e50;
-
+        display: flex;
+        justify-content: flex-start;
+        flex-direction: column;
+        align-items: center;
+        width: 1320px;
+        margin: 0 auto;
     }
     .warp{
         width: 1280px;

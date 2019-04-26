@@ -1,6 +1,5 @@
 <template>
     <div class="header">
-
         <ul class='nav'>
             <li class="title">
                 人才招聘网欢迎你~
@@ -15,56 +14,57 @@
                 <el-button v-if="!now" @click="registerVisible = true" :round=true type="primary">注册</el-button>
                 <div v-if="now" class="user_welcome"> 欢迎,{{now.type|userType}}用户:{{now.account}} <a
                         @click="logout()">退出</a></div>
+                <el-dialog title="用户登录" :visible.sync="dialogFormVisible" width="40%">
+                    <el-form :model="loginForm" :rules="rules" ref="loginForm">
+                        <el-form-item label="账号" :label-width="formLabelWidth" prop="account">
+                            <el-input v-model="loginForm.account" auto-complete="off"></el-input>
+                        </el-form-item>
+                        <el-form-item label="密码" type="password" :label-width="formLabelWidth" prop="pwd">
+                            <el-input v-model="loginForm.pwd" auto-complete="off"></el-input>
+                        </el-form-item>
+                        <el-form-item label="类型" :label-width="formLabelWidth" prop="type">
+                            <el-radio-group v-model="loginForm.type">
+                                <el-radio label="个人"></el-radio>
+                                <el-radio label="公司"></el-radio>
+                                <el-radio label="管理员"></el-radio>
+                            </el-radio-group>
+                        </el-form-item>
+                    </el-form>
+                    <div slot="footer" class="dialog-footer">
+                        <el-button @click="dialogFormVisible = false">取 消</el-button>
+                        <el-button type="primary" @click="login()">登 录</el-button>
+                    </div>
+                </el-dialog>
+                <el-dialog title="用户注册" :visible.sync="registerVisible" width="40%">
+                    <el-form :model="registerForm" :rules="rules2" ref="registerForm">
+                        <el-form-item label="账号" :label-width="formLabelWidth" prop="account">
+                            <el-input v-model="registerForm.account" auto-complete="off"></el-input>
+                        </el-form-item>
+                        <el-form-item label="密码" type="password" :label-width="formLabelWidth" prop="pwd">
+                            <el-input v-model="registerForm.pwd" auto-complete="off"></el-input>
+                        </el-form-item>
+                        <el-form-item label="类型" :label-width="formLabelWidth" prop="type">
+                            <el-radio-group v-model="registerForm.type">
+                                <el-radio label="个人"></el-radio>
+                                <el-radio label="公司"></el-radio>
+                                <el-radio label="管理员"></el-radio>
+                            </el-radio-group>
+                        </el-form-item>
+                        <el-form-item label="电话" :label-width="formLabelWidth" prop="phone">
+                            <el-input v-model="registerForm.phone" auto-complete="off"></el-input>
+                        </el-form-item>
+                        <el-form-item label="邮箱" :label-width="formLabelWidth" prop="email">
+                            <el-input v-model="registerForm.email" auto-complete="off"></el-input>
+                        </el-form-item>
+                    </el-form>
+                    <div slot="footer" class="dialog-footer">
+                        <el-button @click="registerVisible = false">取 消</el-button>
+                        <el-button type="primary" @click="register()">注 册</el-button>
+                    </div>
+                </el-dialog>
             </li>
         </ul>
-        <el-dialog title="用户登录" :visible.sync="dialogFormVisible" width="40%">
-            <el-form :model="loginForm" :rules="rules" ref="loginForm">
-                <el-form-item label="账号" :label-width="formLabelWidth" prop="account">
-                    <el-input v-model="loginForm.account" auto-complete="off"></el-input>
-                </el-form-item>
-                <el-form-item label="密码" :label-width="formLabelWidth" prop="pwd">
-                    <el-input v-model="loginForm.pwd" auto-complete="off"></el-input>
-                </el-form-item>
-                <el-form-item label="类型" :label-width="formLabelWidth" prop="type">
-                    <el-radio-group v-model="loginForm.type">
-                        <el-radio label="个人"></el-radio>
-                        <el-radio label="公司"></el-radio>
-                        <el-radio label="管理员"></el-radio>
-                    </el-radio-group>
-                </el-form-item>
-            </el-form>
-            <div slot="footer" class="dialog-footer">
-                <el-button @click="dialogFormVisible = false">取 消</el-button>
-                <el-button type="primary" @click="login()">登 录</el-button>
-            </div>
-        </el-dialog>
-        <el-dialog title="用户注册" :visible.sync="registerVisible" width="40%">
-            <el-form :model="registerForm" :rules="rules2" ref="registerForm">
-                <el-form-item label="账号" :label-width="formLabelWidth" prop="account">
-                    <el-input v-model="registerForm.account" auto-complete="off"></el-input>
-                </el-form-item>
-                <el-form-item label="密码" :label-width="formLabelWidth" prop="pwd">
-                    <el-input v-model="registerForm.pwd" auto-complete="off"></el-input>
-                </el-form-item>
-                <el-form-item label="类型" :label-width="formLabelWidth" prop="type">
-                    <el-radio-group v-model="registerForm.type">
-                        <el-radio label="个人"></el-radio>
-                        <el-radio label="公司"></el-radio>
-                        <el-radio label="管理员"></el-radio>
-                    </el-radio-group>
-                </el-form-item>
-                <el-form-item label="电话" :label-width="formLabelWidth" prop="phone">
-                    <el-input v-model="registerForm.phone" auto-complete="off"></el-input>
-                </el-form-item>
-                <el-form-item label="邮箱" :label-width="formLabelWidth" prop="email">
-                    <el-input v-model="registerForm.email" auto-complete="off"></el-input>
-                </el-form-item>
-            </el-form>
-            <div slot="footer" class="dialog-footer">
-                <el-button @click="registerVisible = false">取 消</el-button>
-                <el-button type="primary" @click="register()">注 册</el-button>
-            </div>
-        </el-dialog>
+
     </div>
 
 </template>
@@ -147,7 +147,7 @@
                 this.$router.push({path: list[type]});
 
             },
-            logout(){
+            logout() {
                 this.getLogout();
                 this.$router.push({path: '/'});
             },
@@ -194,17 +194,17 @@
         },
         mounted() {
             //console.log(this.$store.getters.allMember)
-            this.registerForm={
+            this.registerForm = {
                 account: '',
-                    pwd: '',
-                    type: '个人',
-                    phone: '',
-                    email: ''
+                pwd: '',
+                type: '个人',
+                phone: '',
+                email: ''
             };
-            this.loginForm={
+            this.loginForm = {
                 account: '',
-                    pwd: '',
-                    type: '个人'
+                pwd: '',
+                type: '个人'
             }
         },
 
@@ -222,10 +222,11 @@
         display: flex;
         justify-content: center;
         align-items: center;
-        width: 100%;
+        width: 1320px;
         padding: 5px 0;
         flex-direction: column;
         background-color: #1e2329;
+        border-radius: 5px;
 
         .title {
             font-size: 30px;
