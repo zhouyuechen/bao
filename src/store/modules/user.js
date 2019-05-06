@@ -1,10 +1,10 @@
 const state = {   //要设置的全局访问的state对象
 
     user: [//type:0个人，1公司，2管理员
-        {uid: 1, account: 'c123456', pwd: "123456", type: 0, phone: 133888877878, email: 'wugui@qq.com',pname:"蔡徐坤"},
-        {uid: 2, account: '787878', pwd: "123456", type: 1, phone: 18888888888, email: '444@qq.com',cname:"傻逼有限公司",cimg:"//img.hicdn.cn/fed/images/20190404/291b64400c0e9b0982706f52ab90971f.png"},
+        {uid: 1, account: 'c123456', pwd: "123456", type: 0, phone: 133888877878, email: 'zhangsan@qq.com',pname:"张三",imageUrl:"https://static001.infoq.cn/resource/image/c0/7f/c0a42862394dfb0a91587474622a257f.jpg?x-oss-process=image/crop,x_630,y_311,w_726,h_538/resize,w_420,h_312"},
+        {uid: 2, account: '787878', pwd: "123456", type: 1, phone: 18888888888, email: '444@qq.com',cname:"AA有限公司",imageUrl:"//img.hicdn.cn/fed/images/20190404/291b64400c0e9b0982706f52ab90971f.png"},
         {uid: 3, account: '999999', pwd: "123456", type: 2, phone: null, email: null},
-        {uid: 4, account: 'ffffff', pwd: "123456", type: 1, phone: 18932322323, email: "444ww@qq.com",cname:"大眼包子公司",cimg:"https://www.jiamengfei.com/uploads/images/2016/04-21/d4e5a1520b3f.jpg"},
+        {uid: 4, account: 'ffffff', pwd: "123456", type: 1, phone: 18932322323, email: "444ww@qq.com",cname:"文艺有限公司",imageUrl:"https://www.jiamengfei.com/uploads/images/2016/04-21/d4e5a1520b3f.jpg"},
 
     ],
     is: false,
@@ -59,7 +59,7 @@ const mutations = {
         })
     },
     update(state, data) {//修改用户
-        let {account, pwd, pname, phone, email}=data;
+        let {account, pwd, pname, phone, email,imageUrl}=data;
         state.user.map((item,i)=>{
             if(item.account == account){
                 console.log(item)
@@ -67,6 +67,8 @@ const mutations = {
                 if(pname !=item.pname) state.user[i].pname=pname;
                 if(phone !=item.phone) state.user[i].phone=phone;
                 if(email !=item.email) state.user[i].email=email;
+                if(imageUrl !=item.imageUrl) state.user[i].imageUrl=imageUrl;
+
             }
         })
     }

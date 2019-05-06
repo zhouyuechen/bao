@@ -15,7 +15,7 @@
         </el-dialog>
         <el-row :gutter="20">
             <el-col :span="12">
-                <img v-loading width="80%" v-bind:src='cimg' alt="公司图片"/>
+                <img v-loading width="80%" v-bind:src='imageUrl' alt="公司图片"/>
             </el-col>
             <el-col :span="12">
                 <el-card class="box-card">
@@ -74,7 +74,7 @@
                 jid: this.$route.params.jid,
                 jobNow: {},
                 companyNow: {},
-                cimg: "//img.hicdn.cn/fed/images/20190419/b201b2a50c46821f8f4560d5972c49bb.jpg",
+                imageUrl: "//img.hicdn.cn/fed/images/20190419/b201b2a50c46821f8f4560d5972c49bb.jpg",
                 tanchuang: false,
                 word: ""
             }
@@ -117,7 +117,7 @@
                     this.allMember.map((it) => {
                         if (item.cname === it.cname) {
                             this.companyNow = it;
-                            this.cimg = this.companyNow.cimg
+                            this.imageUrl = this.companyNow.imageUrl
                         }
                     })
                 }

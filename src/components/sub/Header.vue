@@ -128,7 +128,6 @@
                         {required: true, message: '请输入邮箱', trigger: 'blur'},
                     ],
                 },
-
             }
         },
         computed: {

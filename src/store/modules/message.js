@@ -1,8 +1,8 @@
 const state = {   //要设置的全局访问的state对象
 
     messages: [//type:1个人向公司，2公司向个人
-        {type: 1, fromId:1 , toId: 4,data:"我是练习时长2年半的蔡徐坤，喜欢唱，跳，rap，篮球，想加入贵公司！"},
-        {type: 2, fromId:4 , toId: 1,data:"你还是打球去吧",isSuccess:false},
+        {type: 1, fromId:1 , toId: 2,data:"1",jid:1},
+        {type: 2, fromId:2 , toId: 1,data:"2",isSuccess:false,jid:1},
     ],
 
 

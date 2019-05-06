@@ -6,7 +6,9 @@
             <el-menu-item index="2">我的消息</el-menu-item>
         </el-menu>
         <div class="line" v-if="onshow">
-            <el-form :model="personForm" :rules="rules">
+
+            <el-form :model="personForm" :rules="rules" ref="personForm">
+
                 <el-form-item label="账号" :label-width="formLabelWidth" prop="account">
                     <el-input disabled v-model="personForm.account" auto-complete="off"></el-input>
                 </el-form-item>
@@ -22,7 +24,24 @@
                 </el-form-item>
                 <el-form-item label="邮箱" :label-width="formLabelWidth" prop="email">
                     <el-input :disabled="isChange" v-model="personForm.email" auto-complete="off"></el-input>
+
                 </el-form-item>
+                <el-form-item label="公司图片" :label-width="formLabelWidth" prop="img">
+                    <el-upload
+                            :disabled="isChange"
+                            id="up"
+                            class="avatar-uploader"
+                            action=""
+                            :show-file-list="false"
+                            :auto-upload="false" multiple
+                            accept="image/jpg,image/png,image/jpeg"
+                            :on-change="imgBroadcastChange"
+                            :on-remove="imgBroadcastRemove">
+                        <img v-if="personForm.imageUrl" :src="personForm.imageUrl" alt="加载失败" class="avatar">
+                        <span v-else class="el-icon-plus avatar-uploader-icon">{{isChange?"点击修改上传":"上传简历图片"}}</span>
+                    </el-upload>
+                </el-form-item>
+
             </el-form>
             <el-button @click="isChange = !isChange">修改信息</el-button>
             <el-button :disabled="isChange" type="primary" @click="save()">保存信息</el-button>
@@ -55,7 +74,6 @@
                                 </el-col>
                             </el-row>
                         </li>
-
                     </ul>
                 </el-collapse-item>
             </el-collapse>
@@ -72,7 +90,7 @@
             return {
                 activeIndex: '1',
                 onshow: true,
-                formLabelWidth: '60px',
+                formLabelWidth: '120px',
                 isChange: true,
                 p: "",
                 personForm: {
@@ -80,7 +98,8 @@
                     pwd: '',
                     pname: '',
                     phone: '',
-                    email: ''
+                    email: '',
+                    imageUrl: ''
                 },
                 activeNames: ['1', '2'],
                 messageList: {toOther: [], toMe: []},
@@ -102,6 +121,7 @@
                         {required: true, message: '请输入邮箱', trigger: 'blur'},
                     ],
                 },
+
             }
         },
         computed: {
@@ -111,21 +131,32 @@
         },
         methods: {
             ...mapActions('user', ['getUpdate', 'getLogout']),
-            handleSelect(key, keyPath) {
+            handleSelect(key, keyPath) {//导航条状态
                 this.activeIndex = key;
                 this.onshow = key == 1;
             },
-            save() {
-                this.getUpdate(this.personForm)
-                if(JSON.stringify(this.personForm.pwd)!==this.p){
-                    this.getLogout();
-                    this.$router.push({path: '/'});
-                    this.$message("密码已修改请重新登录")
-                }
+            save() {//保存修改的信息
+                this.$refs['personForm'].validate((valid) => {
+                    if (valid) {
+                        this.getUpdate(this.personForm);
+                        if (JSON.stringify(this.personForm.pwd) !== this.p) {
+                            this.getLogout();
+                            this.$router.push({path: '/'});
+                            this.$message("密码已修改请重新登录")
+                        }else {
+                            this.isChange=!this.isChange;
+                            this.$message("修改成功")
+                        }
+                    } else {
+                        return false;
+                    }
+                });
+
+
             },
             handleChange(val) {
             },
-            searchCompany(cid) {
+            searchCompany(cid) {//查询公司讯息
                 let res;
                 this.allMember.map((item) => {
                     if (item.uid == cid) {
@@ -133,14 +164,40 @@
                     }
                 })
                 return res
-            }
+            },
+            imgBroadcastChange(file, fileList) {//上传的图片发生变化的回调
+                console.log(file)
+                if (!/image\/\w+/.test(file.raw.type)) {
+                    alert("请确保文件为图像类型");
+                    return false;
+                }
+
+                const isLt2M = file.size / 1024 / 1024 < 5 // 上传头像图片大小不能超过 2MB
+                if (!isLt2M) {
+                    this.$message.error('图片选择失败，每张图片大小不能超过 5MB,请重新选择!')
+                } else {
+                    let reader = new FileReader();
+                    reader.onload = (res) => {
+                        console.log(res.target.result)
+                        this.personForm.imageUrl = res.target.result
+                    }
+                    reader.readAsDataURL(file.raw);
+
+                }
+            },
+            // 有图片移除后 触发
+            imgBroadcastRemove(file, fileList) {
+                this.diaLogForm.imgBroadcastList = fileList
+            },
+
+
         },
         mounted() {
             if (!this.check || this.now.type != 0) {
                 this.$router.push({path: '/'});
             }
-            const {account, pwd, pname, phone, email} = this.now;
-            this.personForm = {account, pwd, pname, phone, email};
+            const {account, pwd, pname, phone, email, imageUrl} = this.now;
+            this.personForm = {account, pwd, pname, phone, email, imageUrl};
             this.p = JSON.stringify(pwd);
             const toOther = [], toMe = [];
             this.allMessages.map((item, i) => {
@@ -161,6 +218,50 @@
         padding: 20px;
         width: 50%;
         margin: 20px auto;
+
+    }
+
+    #up {
+        margin: 10px;
+
+        .avatar-uploader .el-upload {
+            border: 1px dashed #d9d9d9 !important;
+            border-radius: 6px;
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+
+        }
+
+        .avatar-uploader .el-upload:hover {
+            border-color: #409EFF;
+        }
+
+        .avatar-uploader-icon {
+            font-size: 28px;
+            color: #8c939d;
+            width: 178px;
+            height: 178px;
+            line-height: 178px;
+            text-align: center;
+            border: 2px dashed #d9d9d9 !important;
+            border-radius: 5px;
+
+            &:hover {
+                border-color: #409EFF;
+
+            }
+        }
+
+        .el-icon-plus:before {
+            content: "" !important;
+        }
+
+        .avatar {
+            width: 178px;
+            height: 178px;
+            display: block;
+        }
     }
 
     .massageBox {
@@ -189,7 +290,6 @@
                 border: 1px solid #f5f5f5;
                 border-radius: 4px;
                 padding: 5px 20px;
-
             }
 
             .text {

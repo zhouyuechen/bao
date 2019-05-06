@@ -30,7 +30,10 @@ module.exports = {
     },
     module: {
         rules: [
-            {test: /.(eot|woff|ttf)$/, loader: 'url-loader'},
+            {
+                test: /\.(eot|svg|ttf|woff|woff2?)$/,
+                loader: 'file-loader'
+            },
             {
                 test: /\.vue$/,
                 loader: 'vue-loader',
