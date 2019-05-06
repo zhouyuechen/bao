@@ -35,8 +35,7 @@
                             :show-file-list="false"
                             :auto-upload="false" multiple
                             accept="image/jpg,image/png,image/jpeg"
-                            :on-change="imgBroadcastChange"
-                            :on-remove="imgBroadcastRemove">
+                            :on-change="imgBroadcastChange">
                         <img v-if="personForm.imageUrl" :src="personForm.imageUrl" alt="加载失败" class="avatar">
                         <span v-else class="el-icon-plus avatar-uploader-icon">{{isChange?"点击修改上传":"上传简历图片"}}</span>
                     </el-upload>
@@ -50,9 +49,12 @@
             <el-collapse v-model="activeNames" @change="handleChange">
                 <el-collapse-item title="我发出的消息" name="1">
                     <ul class="massageBox" id="ex1">
+                        <span v-if="messageList.toOther.length<1">暂无消息</span>
+
                         <li v-for="item in messageList.toOther">
                             <el-row :gutter="20">
-                                <el-col :span="5"><span class="tip">您发给{{searchCompany(item.toId).cname}}的消息：</span>
+                                <el-col :span="5"><span class="tip">您发给{{searchCompany(item.toId).cname}}的消息：</span><br>
+                                    <span >相关职位：{{getJobById(item.jid)}}</span>
                                 </el-col>
                                 <el-col :span="15" class="text">{{ item.data }}</el-col>
                                 <el-col :span="4">
@@ -64,9 +66,11 @@
                 </el-collapse-item>
                 <el-collapse-item title="发给我的消息" name="2">
                     <ul class="massageBox" id="ex2">
+                        <span v-if="messageList.toMe.length<1">暂无消息</span>
                         <li v-for="item in messageList.toMe">
                             <el-row :gutter="20">
-                                <el-col :span="5"><span class="tip">{{searchCompany(item.fromId).cname}}发给您的消息：</span>
+                                <el-col :span="5"><span class="tip">{{searchCompany(item.fromId).cname}}发给您的消息：</span><br>
+                                    <span >相关职位：{{getJobById(item.jid)}}</span>
                                 </el-col>
                                 <el-col :span="15" class="text">{{ item.data }}</el-col>
                                 <el-col :span="4">
@@ -185,10 +189,15 @@
 
                 }
             },
-            // 有图片移除后 触发
-            imgBroadcastRemove(file, fileList) {
-                this.diaLogForm.imgBroadcastList = fileList
-            },
+            getJobById(jid){//查询工作详细信息
+                let name;
+                this.allJobs.map((item)=>{
+                    if(item.jid===jid){
+                        name=item.jname
+                    }
+                })
+                return name
+            }
 
 
         },

@@ -7,7 +7,7 @@
         </el-menu>
         <el-dialog title="回复信息" :visible.sync="tanchuang">
             <div v-if="backOrPub" class="tanchuang">
-                <el-form  :model="returnForm" :rules="rules2" ref="returnForm">
+                <el-form :model="returnForm" :rules="rules2" ref="returnForm">
                     <el-form-item label="回执内容" :label-width="formLabelWidth" prop="account">
                         <el-input v-model="returnForm.word"
                                   type="textarea"
@@ -28,7 +28,7 @@
                 </el-button>
             </div>
             <div v-if="!backOrPub" class="tanchuang">
-                <el-form  :model="newJobForm" :rules="rules3" ref="newJobForm">
+                <el-form :model="newJobForm" :rules="rules3" ref="newJobForm">
                     <el-form-item label="职位名称" :label-width="formLabelWidth" prop="jname">
                         <el-input v-model="newJobForm.jname"
                                   type="text"
@@ -97,13 +97,15 @@
             <el-button :disabled="isChange" type="primary" @click="save()">保存信息</el-button>
         </div>
         <div v-if="!onshow">
-            <el-button  type="primary" @click="openPub()">发布新的招聘信息</el-button>
+            <el-button class="btn" type="primary" @click="openPub()">发布新的招聘信息</el-button>
             <el-collapse v-model="activeNames" @change="handleChange">
                 <el-collapse-item title="我发出的消息" name="1">
                     <ul class="massageBox" id="ex1">
+                        <span v-if="messageList.toOther.length<1">暂无消息</span>
                         <li v-for="item in messageList.toOther">
                             <el-row :gutter="20">
-                                <el-col :span="4"><span class="tip">您发给{{searchCompany(item.toId).pname}}的消息：</span>
+                                <el-col :span="4"><span class="tip">您发给{{searchCompany(item.toId).pname}}的消息：</span><br>
+                                    <span >相关职位：{{getJobById(item.jid)}}</span>
                                 </el-col>
                                 <el-col :span="16" class="text">{{ item.data }}</el-col>
                                 <el-col :span="4"><span class="res"
@@ -116,9 +118,11 @@
                 </el-collapse-item>
                 <el-collapse-item title="发给我的消息" name="2">
                     <ul class="massageBox" id="ex2">
+                        <span v-if="messageList.toMe.length<1">暂无消息</span>
                         <li v-for="item in messageList.toMe">
                             <el-row :gutter="20">
-                                <el-col :span="4"><span class="tip">{{searchCompany(item.fromId).pname}}发给您的消息：</span>
+                                <el-col :span="4"><span class="tip">{{searchCompany(item.fromId).pname}}发给您的消息：</span><br>
+                                    <span >相关职位：{{getJobById(item.jid)}}</span>
                                 </el-col>
                                 <el-col :span="16" class="text">{{ item.data }}</el-col>
                                 <el-col :span="4">
@@ -135,9 +139,11 @@
 
 <script>
     import {mapGetters, mapActions} from 'vuex'
+    import ElSlPanel from "element-ui/packages/color-picker/src/components/sv-panel";
 
     export default {
         name: 'companyDetail',
+        components: {ElSlPanel},
         data() {
             return {
                 activeIndex: '1',
@@ -145,7 +151,7 @@
                 formLabelWidth: '120px',
                 isChange: true,
                 p: "",
-                backOrPub:true,
+                backOrPub: true,
                 cForm: {
                     account: '',
                     pwd: '',
@@ -158,7 +164,7 @@
                     word: "",
                     isSuccess: "1"
                 },
-                newJobForm:{
+                newJobForm: {
                     jname: "",
                     jrequire: "",
                     jmoney: "",
@@ -210,7 +216,8 @@
         },
         computed: {
             ...mapGetters('user', ['allMember', 'check', 'now']),
-            ...mapGetters('message', ['allMessages'])
+            ...mapGetters('message', ['allMessages']),
+            ...mapGetters('jobs', ['allJobs']),
 
         },
         watch: {
@@ -230,6 +237,7 @@
         methods: {
             ...mapActions('user', ['getUpdate', 'getLogout']),
             ...mapActions('message', ['getMessagesAdd']),
+            ...mapActions('jobs', ['getAddJob']),
 
             handleSelect(key, keyPath) {
                 this.activeIndex = key;
@@ -243,8 +251,8 @@
                             this.getLogout();
                             this.$router.push({path: '/'});
                             this.$message("密码已修改请重新登录")
-                        }else {
-                            this.isChange=!this.isChange;
+                        } else {
+                            this.isChange = !this.isChange;
                             this.$message("修改成功")
                         }
                     } else {
@@ -280,13 +288,13 @@
 
             },
             openTan(uid) {//打开回复弹窗
-                this.backOrPub=true;
+                this.backOrPub = true;
                 this.tanchuang = true;
                 this.personId = uid;
 
             },
             openPub() {//打开发布弹窗
-                this.backOrPub=false;
+                this.backOrPub = false;
                 this.tanchuang = true;
 
             },
@@ -311,33 +319,38 @@
 
                 }
             },
-
-
-            publish(){//发布新的招聘
+            publish() {//发布新的招聘
                 this.$refs['newJobForm'].validate((valid) => {
                     if (valid) {
-                        const data={
-                            cname:this.now.cname,
-                            cphone:this.now.phone,
+                        const data = {
+                            cname: this.now.cname,
+                            cphone: this.now.phone,
                             ...this.newJobForm
                         }
-                        console.log(data)
-                        //this.getUpdate(this.cForm)
-
-                            this.$message("发布成功")
-
+                        this.getAddJob(data)
+                        this.$message("发布成功")
+                        this.tanchuang=false
                     } else {
                         return false;
                     }
                 });
+            },
+            getJobById(jid){//查询工作详细信息
+                let name;
+                this.allJobs.map((item)=>{
+                    if(item.jid===jid){
+                        name=item.jname
+                    }
+                })
+                return name
             }
         },
         mounted() {
             if (!this.check || this.now.type != 1) {
                 this.$router.push({path: '/'});
             }
-            const {account, pwd, cname, phone, email,imageUrl} = this.now;
-            this.cForm = {account, pwd, cname, phone, email,imageUrl};
+            const {account, pwd, cname, phone, email, imageUrl} = this.now;
+            this.cForm = {account, pwd, cname, phone, email, imageUrl};
             this.p = pwd.toString();
             const toOther = [], toMe = [];
             this.allMessages.map((item, i) => {
@@ -358,6 +371,10 @@
         padding: 20px;
         width: 50%;
         margin: 20px auto;
+    }
+    .btn{
+        margin: 20px;
+        align-self:flex-start;
     }
     #up {
         margin: 10px;
@@ -401,11 +418,13 @@
             display: block;
         }
     }
+
     .massageBox {
-        ul{
+        ul {
             padding: 0;
             margin: 0;
         }
+
         li {
             list-style: none;
 

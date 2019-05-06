@@ -39,6 +39,11 @@
                             size="mini"
                             @click="look(scope.$index, scope.row)">查看详情
                     </el-button>
+                    <el-button
+                            v-if="showDel(scope.$index, scope.row)"
+                            size="mini"
+                            @click="delJob(scope.$index, scope.row)">删除
+                    </el-button>
                 </template>
             </el-table-column>
         </el-table>
@@ -47,7 +52,8 @@
 </template>
 
 <script>
-    import { mapGetters, mapActions } from 'vuex'
+    import {mapGetters, mapActions} from 'vuex'
+
     export default {
         name: 'list',
         data() {
@@ -56,15 +62,37 @@
             }
         },
         methods: {
-            look(i,item) {
+            ...mapActions('jobs', ['getDelJob']),
+
+            look(i, item) {
                 this.$router.push({path: `/jobDetail/${item.jid}`});
+            },
+            delJob(i, item) {
+                const isDel = confirm(`是否删除？`);
+                if(isDel){
+                    this.getDelJob(item);
+                    this.$message('删除成功');
+                }
+            },
+            showDel(i,item){
+                let res=false;
+                if(this.now&&this.now.type===2){
+                    res=true;
+                }
+                if(this.now&&this.now.type===1&&this.now.cname===item.cname){
+                    res=true;
+                }
+                return res
             }
         },
         computed: {
-            ...mapGetters('jobs',['allJobs'])
+            ...mapGetters('jobs', ['allJobs']),
+            ...mapGetters('user', ['allMember', 'check', 'now']),
+
         },
 
         mounted() {
+
 
         }
     }

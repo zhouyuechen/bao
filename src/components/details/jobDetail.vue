@@ -80,11 +80,12 @@
             }
         },
         computed: {
-            ...mapGetters('jobs', ['allJobs', 'getJobById']),
+            ...mapGetters('jobs', ['allJobs']),
             ...mapGetters('user', ['allMember', 'check', 'now'])
         },
         methods: {
             ...mapActions('message', ['getMessagesAdd']),
+
             join() {
                 if (!this.check) {
                     this.$message("您还没有登录")
