@@ -5,8 +5,8 @@
             <el-menu-item index="1">公司信息</el-menu-item>
             <el-menu-item index="2">公司消息</el-menu-item>
         </el-menu>
-        <el-dialog title="回复信息" :visible.sync="tanchuang">
-            <div v-if="backOrPub" class="tanchuang">
+        <el-dialog :title="this.title()" :visible.sync="tanchuang">
+            <div v-if="backOrPub===1" class="tanchuang">
                 <el-form :model="returnForm" :rules="rules2" ref="returnForm">
                     <el-form-item label="回执内容" :label-width="formLabelWidth" prop="account">
                         <el-input v-model="returnForm.word"
@@ -27,7 +27,7 @@
                 <el-button style="margin:20px 50px" @click="backTo()">发送回执
                 </el-button>
             </div>
-            <div v-if="!backOrPub" class="tanchuang">
+            <div v-if="backOrPub===2" class="tanchuang">
                 <el-form :model="newJobForm" :rules="rules3" ref="newJobForm">
                     <el-form-item label="职位名称" :label-width="formLabelWidth" prop="jname">
                         <el-input v-model="newJobForm.jname"
@@ -60,6 +60,9 @@
                 <el-button style="margin:20px 50px" @click="publish()">发布新的招聘
                 </el-button>
             </div>
+            <div v-if="backOrPub===3" class="tanchuang">
+                <img :src="personImg" width="100%" alt="个人简历" />
+            </div>
         </el-dialog>
         <div class="line" v-if="onshow">
             <el-form :model="cForm" :rules="rules" ref="cForm">
@@ -78,7 +81,7 @@
                 <el-form-item label="邮箱" :label-width="formLabelWidth" prop="email">
                     <el-input :disabled="isChange" v-model="cForm.email" auto-complete="off"></el-input>
                 </el-form-item>
-                <el-form-item label="简历图片" :label-width="formLabelWidth" prop="img">
+                <el-form-item label="公司图片" :label-width="formLabelWidth" prop="img">
                     <el-upload
                             :disabled="isChange"
                             id="up"
@@ -127,6 +130,7 @@
                                 <el-col :span="16" class="text">{{ item.data }}</el-col>
                                 <el-col :span="4">
                                     <button class="res green" @click="openTan(item.fromId)"> 回复</button>
+                                    <button class="res green" @click="openImg(item.fromId)"> 查看简历</button>
                                 </el-col>
                             </el-row>
                         </li>
@@ -146,12 +150,13 @@
         components: {ElSlPanel},
         data() {
             return {
+                personImg:"*",
                 activeIndex: '1',
+                backOrPub: 1,
                 onshow: true,
                 formLabelWidth: '120px',
                 isChange: true,
                 p: "",
-                backOrPub: true,
                 cForm: {
                     account: '',
                     pwd: '',
@@ -238,7 +243,14 @@
             ...mapActions('user', ['getUpdate', 'getLogout']),
             ...mapActions('message', ['getMessagesAdd']),
             ...mapActions('jobs', ['getAddJob']),
-
+            title(){
+                const bb={
+                    1:'回复信息',
+                    2:'发布招聘',
+                    3:'个人简历'
+                }
+                return bb[this.backOrPub]
+            },
             handleSelect(key, keyPath) {
                 this.activeIndex = key;
                 this.onshow = key == 1;
@@ -288,14 +300,25 @@
 
             },
             openTan(uid) {//打开回复弹窗
-                this.backOrPub = true;
+                this.backOrPub = 1;
                 this.tanchuang = true;
                 this.personId = uid;
 
             },
             openPub() {//打开发布弹窗
-                this.backOrPub = false;
+                this.backOrPub = 2;
                 this.tanchuang = true;
+
+            },
+            openImg(uid) {//打开个人简历弹窗
+                this.backOrPub = 3;
+                this.allMember.map((item)=>{
+                    if(uid===item.uid){
+                        this.personImg=item.imageUrl
+                    }
+                })
+                this.tanchuang = true;
+                this.personId = uid;
 
             },
             imgBroadcastChange(file, fileList) {//上传的图片发生变化的回调

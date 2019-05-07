@@ -67,9 +67,13 @@
             ...mapActions('user', ['getDel']),
             delUser(data){
                 const isDel = confirm(`是否删除用户${data.account}？`);
+                const that=this;
                 if(isDel){
-                   this.getDel(data);
-                    this.$message('删除成功');
+                   this.getDel({
+                       ...data,
+                       that
+                   });
+
                 }
             }
         },

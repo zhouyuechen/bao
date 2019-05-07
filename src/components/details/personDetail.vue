@@ -26,7 +26,7 @@
                     <el-input :disabled="isChange" v-model="personForm.email" auto-complete="off"></el-input>
 
                 </el-form-item>
-                <el-form-item label="公司图片" :label-width="formLabelWidth" prop="img">
+                <el-form-item label="简历图片" :label-width="formLabelWidth" prop="img">
                     <el-upload
                             :disabled="isChange"
                             id="up"
@@ -130,7 +130,8 @@
         },
         computed: {
             ...mapGetters('user', ['allMember', 'check', 'now']),
-            ...mapGetters('message', ['allMessages'])
+            ...mapGetters('message', ['allMessages']),
+            ...mapGetters('jobs', ['allJobs'])
 
         },
         methods: {
@@ -162,6 +163,7 @@
             },
             searchCompany(cid) {//查询公司讯息
                 let res;
+                console.log(this.allMember)
                 this.allMember.map((item) => {
                     if (item.uid == cid) {
                         res = item

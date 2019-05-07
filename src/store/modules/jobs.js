@@ -67,13 +67,21 @@ const mutations = {
     },
     del(state, data) {//删除
             state.jobs.map((item, i) => {
-                if (item.jid == data.jid) {
+                if (item.jid === data.jid) {
                     state.jobs.splice(i, 1);
                     return null
                 }
             })
 
     },
+    edit(state, data){
+        state.jobs.map((item, i) => {
+            if (item.jid ===data.jid) {
+                state.jobs[i]=data
+                return null
+            }
+        })
+    }
 };
 const actions = {
     getAddJob(context, data) {   //同上注释，num为要变化的形参
@@ -81,6 +89,9 @@ const actions = {
     },
     getDelJob(context, data) {   //同上注释，num为要变化的形参
         context.commit('del', data)
+    },
+    getEditJob(context, data) {   //同上注释，num为要变化的形参
+        context.commit('edit', data)
     },
 };
 

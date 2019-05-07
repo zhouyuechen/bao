@@ -80,11 +80,11 @@ const mutations = {
     del(state, data) {//删除用户
         if (data.uid == state.userNow.uid) {
             alert('你不能删除你自己')
-
         } else {
             state.user.map((item, i) => {
                 if (item.uid == data.uid) {
                     state.user.splice(i, 1);
+                    data.that.$message('删除成功');
                     return null
                 }
             })
