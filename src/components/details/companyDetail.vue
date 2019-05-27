@@ -327,18 +327,17 @@
                     alert("请确保文件为图像类型");
                     return false;
                 }
-
                 const isLt2M = file.size / 1024 / 1024 < 5 // 上传头像图片大小不能超过 2MB
                 if (!isLt2M) {
                     this.cForm.imageUrl = fileList.filter(v => v.uid !== file.uid)
                     this.$message.error('图片选择失败，每张图片大小不能超过 5MB,请重新选择!')
                 } else {
                     let reader = new FileReader();
-                    reader.onload = (res) => {
+                    reader.onload = (res) => {//图片上传成功后的回调
                         console.log(res.target.result)
                         this.cForm.imageUrl = res.target.result
                     }
-                    reader.readAsDataURL(file.raw);
+                    reader.readAsDataURL(file.raw);//加载file.raw这个文件流
 
                 }
             },

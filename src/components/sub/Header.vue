@@ -136,7 +136,7 @@
         },
         methods: {
             ...mapActions('user', ['getLogin', 'getRegister', 'getLogout']),
-            jump(type) {
+            jump(type) {//跳转
                 const list = {
                     0: '/personDetail',
                     1: '/companyDetail',
@@ -144,13 +144,13 @@
                     3: '/list',
                 };
                 this.$router.push({path: list[type]});
-
             },
-            logout() {
+            logout() {//退出登录
                 this.getLogout();
                 this.$router.push({path: '/'});
             },
-            login() {
+            login() {//登录的具体操作
+                alert("沙包")
                 let data = this.loginForm;
                 data.type = this.typeList[data.type];
                 console.log(data);
@@ -164,7 +164,6 @@
                             this.$message('账号或者密码错误,或者用户类型不对');
                         }
                     } else {
-
                         return false;
                     }
                 });

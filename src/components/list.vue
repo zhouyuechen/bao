@@ -161,7 +161,7 @@
                 };
                 this.tanchuang = true
             },
-            edit() {
+            edit() {//确认编辑
                 this.$refs['newJobForm'].validate((valid) => {
                     if (valid) {
                         this.getEditJob(this.newJobForm)

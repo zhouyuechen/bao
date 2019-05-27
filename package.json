@@ -2,7 +2,7 @@
   "name": "bao",
   "version": "1.0.0",
   "description": "A Vue.js project",
-  "author": "周玥辰 <zhouyuechen@163.com>",
+  "author": "傻包",
   "private": true,
   "scripts": {
     "dev": "webpack-dev-server --inline --progress --config build/webpack.dev.conf.js",
